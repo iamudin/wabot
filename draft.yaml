@@ -1,0 +1,87 @@
+models:
+  Rw:
+    nomor: string
+    relationships:
+      hasMany: Rt 
+
+  Rt:
+    rw_id: foreign
+    nomor: string
+    relationships:
+      hasMany: Penduduk
+
+  Registrasi:
+    sesi_dimulai: timestamp nullable
+    sesi_berakir: timestamp nullable
+    nomor_whatsapp: string
+    relationships:
+      hasMany: DataRegistrasi
+
+  DataRegistrasi:
+    registrasi_id: foreign
+    kata_kunci: string
+    pertanyaan: string
+    jawaban: string nullable
+    urutan: tinyInteger
+    status: enum:dijawab,menunggu
+    
+  Penduduk:
+    nik: string:16
+    nama: string
+    jenis_kelamin: enum:L,P
+    alamat: string nullable
+    rt_id: foreign nullable
+    agama: string nullable
+    status_kawin: string nullable
+    nomor_whatsapp: string index
+    terdaftar_pada: timestamp nullable
+    terverifikasi_pada: timestamp nullable
+    relationships:
+      hasMany: Permohonan
+
+
+  Kategori:
+    nama_kategori: string
+    status: boolean
+    
+  Layanan:
+    kategori_id: foreign
+    nama_layanan: string
+    keterangan: text
+    status: boolean
+    relationships:
+      hasMany: Permohonan, SyaratLayanan
+
+  Permohonan:
+    layanan_id: foreign
+    sesi_dimulai: timestamp nullable
+    sesi_berakir: timestamp nullable
+    status_permohonan: string default:baru
+    penduduk_id: foreign
+    pemohon_id: foreign
+    relationships:
+      hasMany: DataPermohonan
+
+  SyaratLayanan:
+    layanan_id: foreign
+    nama: string
+    keterangan: string
+    jenis_syarat: enum:file,text
+    status: boolean
+    urutan: tinyInteger
+    perintah: text
+    sumber_data: enum:user,database
+    relationships:
+      hasMany: DataPermohonan
+
+  DataPermohonan:
+    permohonan_id: foreign
+    syarat_layanan_id: foreign
+    keterangan: string
+    koreksidata: string
+    status: enum:dijawab,menunggu
+
+  AutoReply:
+    key: string nullable
+    value: text nullable
+    action: enum:reply_value,aksi

@@ -1,0 +1,46 @@
+created:
+    - database/factories/RwFactory.php
+    - database/factories/RtFactory.php
+    - database/factories/RegistrasiFactory.php
+    - database/factories/DataRegistrasiFactory.php
+    - database/factories/PendudukFactory.php
+    - database/factories/KategoriFactory.php
+    - database/factories/LayananFactory.php
+    - database/factories/PermohonanFactory.php
+    - database/factories/SyaratLayananFactory.php
+    - database/factories/DataPermohonanFactory.php
+    - database/factories/AutoReplyFactory.php
+    - database/migrations/2025_11_22_071400_create_rws_table.php
+    - database/migrations/2025_11_22_071401_create_rts_table.php
+    - database/migrations/2025_11_22_071402_create_registrasis_table.php
+    - database/migrations/2025_11_22_071403_create_data_registrasis_table.php
+    - database/migrations/2025_11_22_071404_create_penduduks_table.php
+    - database/migrations/2025_11_22_071405_create_kategoris_table.php
+    - database/migrations/2025_11_22_071406_create_layanans_table.php
+    - database/migrations/2025_11_22_071407_create_permohonans_table.php
+    - database/migrations/2025_11_22_071408_create_syarat_layanans_table.php
+    - database/migrations/2025_11_22_071409_create_data_permohonans_table.php
+    - database/migrations/2025_11_22_071410_create_auto_replies_table.php
+    - app/Models/Rw.php
+    - app/Models/Rt.php
+    - app/Models/Registrasi.php
+    - app/Models/DataRegistrasi.php
+    - app/Models/Penduduk.php
+    - app/Models/Kategori.php
+    - app/Models/Layanan.php
+    - app/Models/Permohonan.php
+    - app/Models/SyaratLayanan.php
+    - app/Models/DataPermohonan.php
+    - app/Models/AutoReply.php
+models:
+    Rw: { nomor: string, relationships: { hasMany: Rt } }
+    Rt: { rw_id: foreign, nomor: string, relationships: { hasMany: Penduduk } }
+    Registrasi: { sesi_dimulai: 'timestamp nullable', sesi_berakir: 'timestamp nullable', nomor_whatsapp: string, relationships: { hasMany: DataRegistrasi } }
+    DataRegistrasi: { registrasi_id: foreign, kata_kunci: string, pertanyaan: string, jawaban: 'string nullable', urutan: tinyInteger, status: 'enum:dijawab,menunggu' }
+    Penduduk: { nik: 'string:16', nama: string, jenis_kelamin: 'enum:L,P', alamat: 'string nullable', rt_id: 'foreign nullable', agama: 'string nullable', status_kawin: 'string nullable', nomor_whatsapp: 'string index', terdaftar_pada: 'timestamp nullable', terverifikasi_pada: 'timestamp nullable', relationships: { hasMany: Permohonan } }
+    Kategori: { nama_kategori: string, status: boolean }
+    Layanan: { kategori_id: foreign, nama_layanan: string, keterangan: text, status: boolean, relationships: { hasMany: 'Permohonan, SyaratLayanan' } }
+    Permohonan: { layanan_id: foreign, sesi_dimulai: 'timestamp nullable', sesi_berakir: 'timestamp nullable', status_permohonan: 'string default:baru', penduduk_id: foreign, pemohon_id: foreign, relationships: { hasMany: DataPermohonan } }
+    SyaratLayanan: { layanan_id: foreign, nama: string, keterangan: string, jenis_syarat: 'enum:file,text', status: boolean, urutan: tinyInteger, sumber_data: 'enum:user,database', relationships: { hasMany: DataPermohonan } }
+    DataPermohonan: { permohonan_id: foreign, syarat_layanan_id: foreign, keterangan: string, koreksidata: string, status: 'enum:dijawab,menunggu' }
+    AutoReply: { key: 'string nullable', value: 'text nullable', action: 'enum:reply_value,aksi' }
