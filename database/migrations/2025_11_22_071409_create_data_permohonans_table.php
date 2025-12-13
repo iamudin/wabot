@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('keterangan');
             $table->string('koreksidata');
             $table->enum('status', ["dijawab","menunggu"]);
+            $table->boolean('is_valid')->nullable();
             $table->timestamps();
         });
 

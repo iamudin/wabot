@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nama_layanan');
             $table->text('keterangan');
             $table->boolean('status');
+            $table->string('template')->nullable();
             $table->timestamps();
         });
 

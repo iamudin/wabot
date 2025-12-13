@@ -15,8 +15,7 @@ class AutoReply extends Model
      * @var array
      */
     protected $fillable = [
-        'key',
-        'value',
+      'key', 'value', 'level', 'parent_id',
         'action',
     ];
 
@@ -30,5 +29,14 @@ class AutoReply extends Model
         return [
             'id' => 'integer',
         ];
+    }
+
+    public function parent(){
+        return $this->belongsTo(AutoReply::class, 'parent_id');
+    }
+
+    public function childs()
+    {
+        return $this->hasMany(AutoReply::class, 'parent_id');
     }
 }

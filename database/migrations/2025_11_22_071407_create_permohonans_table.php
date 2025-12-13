@@ -16,11 +16,18 @@ return new class extends Migration
         Schema::create('permohonans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('layanan_id')->constrained();
-            $table->timestamp('sesi_dimulai')->nullable();
-            $table->timestamp('sesi_berakir')->nullable();
+            $table->timestamp('diproses_pada')->nullable();
+            $table->timestamp('diajukan_pada')->nullable();
+            $table->timestamp('diselesaikan_pada')->nullable();
+            $table->timestamp('ditolak_pada')->nullable();
+            $table->text('alasan_penolakan')->nullable();
             $table->string('status_permohonan')->default('baru');
             $table->foreignId('penduduk_id')->constrained();
             $table->foreignId('pemohon_id')->constrained();
+            $table->string('file_surat')->nullable();
+            $table->string('penandatangan_id')->nullable();
+            $table->string('kode_tiket')->nullable();
+
             $table->timestamps();
         });
 

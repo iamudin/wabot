@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('key')->nullable();
             $table->text('value')->nullable();
             $table->enum('action', ["reply_value","aksi"]);
+            $table->integer('level')->default(1);
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
         });
 

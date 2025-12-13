@@ -18,10 +18,11 @@ return new class extends Migration
             $table->foreignId('layanan_id')->constrained();
             $table->string('nama');
             $table->string('keterangan');
-            $table->enum('jenis_syarat', ["file","text"]);
+            $table->enum('jenis_syarat', ["file","text","array"]);
             $table->boolean('status');
             $table->tinyInteger('urutan');
             $table->enum('sumber_data', ["user","database"]);
+            $table->string('kata_kunci')->nullable();
             $table->timestamps();
         });
 

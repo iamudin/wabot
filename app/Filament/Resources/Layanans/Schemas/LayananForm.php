@@ -15,7 +15,7 @@ class LayananForm
         return $schema
             ->components([
                 Select::make('kategori_id')
-                    ->relationship('kategori', 'id')
+                    ->relationship('kategori', 'nama_kategori')
                     ->required(),
                 TextInput::make('nama_layanan')
                     ->required(),

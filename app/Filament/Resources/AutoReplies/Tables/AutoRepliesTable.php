@@ -1,27 +1,25 @@
 <?php
 
-namespace App\Filament\Resources\Layanans\Tables;
+namespace App\Filament\Resources\AutoReplies\Tables;
 
-use Filament\Tables\Table;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
-class LayanansTable
+class AutoRepliesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('kategori.nama_kategori')
+                TextColumn::make('key')
                     ->searchable(),
-                TextColumn::make('nama_layanan')
+                TextColumn::make('value')
                     ->searchable(),
-                IconColumn::make('status')
-                    ->boolean(),
+                TextColumn::make('action')
+                    ->badge(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -36,7 +34,6 @@ class LayanansTable
             ])
             ->recordActions([
                 EditAction::make(),
-                DeleteAction::make()->visible(fn($record)=>$record->permohonans->count()==0),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

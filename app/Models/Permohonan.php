@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Permohonan extends Model
 {
     use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -24,7 +24,13 @@ class Permohonan extends Model
         'penduduk_id',
         'pemohon_id',
     ];
-
+    public static function booted()
+    {
+        static::deleting(function ($model) {
+            // Hapus relasi
+            $model->dataPermohonans()->delete();
+        });
+    }
     /**
      * Get the attributes that should be cast.
      *
@@ -37,6 +43,9 @@ class Permohonan extends Model
             'layanan_id' => 'integer',
             'sesi_dimulai' => 'timestamp',
             'sesi_berakir' => 'timestamp',
+            'diproses_pada'=>'datetime',
+            'ditolak_pada' => 'datetime',
+            'diselesaikan_pada' => 'datetime',
             'penduduk_id' => 'integer',
             'pemohon_id' => 'integer',
         ];
@@ -60,5 +69,10 @@ class Permohonan extends Model
     public function pemohon(): BelongsTo
     {
         return $this->belongsTo(Penduduk::class);
+    }
+
+    public function penandatangan(): BelongsTo
+    {
+        return $this->belongsTo(Penandatangan::class);
     }
 }

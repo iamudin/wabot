@@ -2,17 +2,18 @@
 
 namespace App\Filament\Resources\Rws;
 
-use App\Filament\Resources\Rws\Pages\CreateRw;
+use BackedEnum;
+use App\Models\Rw;
+use Filament\Tables\Table;
+use Filament\Schemas\Schema;
+use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use App\Filament\Resources\Rws\Pages\EditRw;
 use App\Filament\Resources\Rws\Pages\ListRws;
+use App\Filament\Resources\Rws\Pages\CreateRw;
 use App\Filament\Resources\Rws\Schemas\RwForm;
 use App\Filament\Resources\Rws\Tables\RwsTable;
-use App\Models\Rw;
-use BackedEnum;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Table;
+use App\Filament\Resources\Rws\RelationManagers\RtRelationManager;
 
 class RwResource extends Resource
 {
@@ -35,7 +36,7 @@ class RwResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            'rts'=>RtRelationManager::class
         ];
     }
 

@@ -2,13 +2,80 @@
 
 namespace App\Filament\Resources\Penduduks\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
+use App\Models\Rt;
+use App\Models\Rw;
+use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Schema;
+use Filament\Forms\Components\DateTimePicker;
 
 class PendudukForm
 {
+    public static function form(): array
+    {
+        return [
+            TextInput::make('nik')
+                ->required(),
+            TextInput::make('nama')
+                ->required(),
+            Select::make('jenis_kelamin')
+                ->options(['L' => 'L', 'P' => 'P'])
+                ->required(),
+            TextInput::make('alamat'),
+            Select::make('rw_filter')
+                ->label('RW')
+                ->options(
+                    RW::query()->pluck('nomor', 'id')->mapWithKeys(fn($v, $k) => [(int) $k => $v]) // ✅ pastikan key integer
+                )
+                ->afterStateHydrated(function (callable $set, $record) {   // ✅ ini yang memastikan tampil
+                    if ($record && $record->rt) {
+                        $set('rw_filter', $record->rt->rw_id);
+                    }
+                })
+                ->getOptionLabelUsing(fn($value) => RW::find($value)?->nomor)
+                ->preload()
+                ->reactive()
+                ->afterStateUpdated(fn(callable $set) => $set('rt_id', null))
+                ->dehydrated(false),
+
+
+
+            Select::make('rt_id')
+                ->label('RT')
+                ->relationship(
+                    name: 'rt',
+                    titleAttribute: 'nomor', // tampilkan nomor, bukan id
+                    modifyQueryUsing: function ($query, callable $get, $record) {
+                        $rwId = $get('rw_filter');
+
+                        // saat edit, jika belum memilih RW, pakai RW dari RT existing
+                        if (!$rwId && $record) {
+                            $rwId = $record->rt?->rw_id;
+                        }
+
+                        if ($rwId) {
+                            $query->where('rw_id', $rwId);
+                        }
+                    }
+                )
+                ->required()
+                ->reactive()
+                ->preload(), // agar label RT tampil langsung saat edit
+
+            Select::make('agama')->options([
+                'Islam' => 'Islam',
+                'Katolik' => 'Katolik',
+                'Kristen' => 'Kristen',
+                'Budha' => 'Budha'
+            ]),
+            Select::make('status_kawin')->options([
+                'Kawin' => 'Kawin',
+                'Belum Kawin' => 'Belum Kawin'
+            ]),
+            TextInput::make('nomor_whatsapp')
+                ->required()
+        ];
+    }
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -21,14 +88,58 @@ class PendudukForm
                     ->options(['L' => 'L', 'P' => 'P'])
                     ->required(),
                 TextInput::make('alamat'),
-                Select::make('rt_id')
-                    ->relationship('rt', 'id'),
-                TextInput::make('agama'),
-                TextInput::make('status_kawin'),
+Select::make('rw_filter')
+    ->label('RW')
+    ->options(
+        RW::query()->pluck('nomor', 'id')->mapWithKeys(fn ($v, $k) => [(int) $k => $v]) // ✅ pastikan key integer
+    )
+    ->afterStateHydrated(function (callable $set, $record) {   // ✅ ini yang memastikan tampil
+        if ($record && $record->rt) {
+            $set('rw_filter', $record->rt->rw_id);
+        }
+    })
+    ->getOptionLabelUsing(fn ($value) => RW::find($value)?->nomor)
+    ->preload()
+    ->reactive()
+    ->afterStateUpdated(fn (callable $set) => $set('rt_id', null))
+    ->dehydrated(false),
+
+
+
+Select::make('rt_id')
+    ->label('RT')
+    ->relationship(
+        name: 'rt',
+        titleAttribute: 'nomor', // tampilkan nomor, bukan id
+        modifyQueryUsing: function ($query, callable $get, $record) {
+            $rwId = $get('rw_filter');
+
+            // saat edit, jika belum memilih RW, pakai RW dari RT existing
+            if (!$rwId && $record) {
+                $rwId = $record->rt?->rw_id;
+            }
+
+            if ($rwId) {
+                $query->where('rw_id', $rwId);
+            }
+        }
+    )
+    ->required()
+    ->reactive()
+    ->preload(), // agar label RT tampil langsung saat edit
+
+                Select::make('agama')->options([
+                   'Islam' => 'Islam',
+                   'Katolik' =>'Katolik',
+                   'Kristen' =>'Kristen',
+                    'Budha'=>'Budha'
+                ]),
+                Select::make('status_kawin')->options([
+                   'Kawin' =>'Kawin',
+                   'Belum Kawin'=>'Belum Kawin'
+                ]),
                 TextInput::make('nomor_whatsapp')
-                    ->required(),
-                DateTimePicker::make('terdaftar_pada'),
-                DateTimePicker::make('terverifikasi_pada'),
+                    ->required()
             ]);
     }
 }

@@ -2,17 +2,18 @@
 
 namespace App\Filament\Resources\Penduduks;
 
-use App\Filament\Resources\Penduduks\Pages\CreatePenduduk;
+use BackedEnum;
+use App\Models\Penduduk;
+use Filament\Tables\Table;
+use Filament\Schemas\Schema;
+use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
 use App\Filament\Resources\Penduduks\Pages\EditPenduduk;
 use App\Filament\Resources\Penduduks\Pages\ListPenduduks;
+use App\Filament\Resources\Penduduks\Pages\CreatePenduduk;
 use App\Filament\Resources\Penduduks\Schemas\PendudukForm;
 use App\Filament\Resources\Penduduks\Tables\PenduduksTable;
-use App\Models\Penduduk;
-use BackedEnum;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Table;
+use App\Filament\Resources\Permohonan\RelationManagers\PermohonanRelationManager;
 
 class PendudukResource extends Resource
 {
@@ -35,7 +36,7 @@ class PendudukResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            'permohonans'=>PermohonanRelationManager::class
         ];
     }
 
