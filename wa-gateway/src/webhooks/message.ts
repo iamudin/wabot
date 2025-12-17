@@ -31,10 +31,17 @@ export const createWebhookMessage =
     const video = await handleWebhookVideoMessage(message);
     const document = await handleWebhookDocumentMessage(message);
     const audio = await handleWebhookAudioMessage(message);
-
+const from: string =
+  [
+    message.key.remoteJidAlt,
+    message.key.remoteJid,
+  ]
+    .filter((jid): jid is string => typeof jid === "string")
+    .map(jid => jid.replace(/@.+$/, ""))
+    .find(num => num.startsWith("62")) ?? "";
     const body = {
       session: message.sessionId,
-      from: message.key.remoteJid ?? null,
+      from: from,
       message:
         message.message?.conversation ||
         message.message?.extendedTextMessage?.text ||
