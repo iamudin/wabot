@@ -16,19 +16,18 @@ class ApiWebhook extends Controller
 
     public function webhook(Request $request)
     {
-        $data = $request->all();
-
+        
+      
         // ============================
         // Ambil nomor WA
         // ============================
-        $phone = collect($data['from'] ?? [])
-            ->filter(fn($v) => str_starts_with($v, '62'))
-            ->map(fn($v) => str($v)->before('@')->value())
-            ->first();
 
+        $data = $request->all();
+        $phone = $data['from'] ?? null;
+            
         if (!$phone)
             return;
-
+        
         $input = strtolower(trim($data['message'] ?? ''));
 
         // Ambil menu utama
@@ -182,7 +181,7 @@ class ApiWebhook extends Controller
         defer(fn() => Http::post(config('wabot.wa_host') . '/message/send-text', [
             'session' => 'sadhan',
             'to' => $phone,
-            'text' => $text,
+            'text' => str_replace('\n', "\r", $text),
             'is_group' => false,
         ]));
 
