@@ -179,7 +179,7 @@ class ApiWebhook extends Controller
     private function send($phone, $text)
     {
         defer(fn() => Http::post(config('wabot.wa_host') . '/message/send-text', [
-            'session' => 'sadhan',
+            'session' => config('wabot.wa_session'),
             'to' => $phone,
             'text' => str_replace('\n', "\r", $text),
             'is_group' => false,
