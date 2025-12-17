@@ -31,6 +31,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('')
             ->login()
+            ->brandName('Admin Desa')
+            // ->brandLogo(asset('storage/logo/logo-desa.png'))
+
             ->colors([
                 'primary' => Color::Amber,
             ])
