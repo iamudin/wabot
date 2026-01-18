@@ -18,12 +18,9 @@ class AutoRepliesTable
           ->modifyQueryUsing(fn (Builder $query) =>
             $query->where('parent_id', null))
             ->columns([
-                TextColumn::make('key')
-                    ->searchable(),
-              
-
-                TextColumn::make('action')
-                    ->badge(),
+                    TextColumn::make('key')
+                        ->searchable(),
+             TextColumn::make('title'),   
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

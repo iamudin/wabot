@@ -11,7 +11,7 @@ class CreatePermohonan extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         // salin nilai penduduk_id ke pemohon_id
-        $data['pemohon_id'] = $data['penduduk_id'] ?? null;
+        // $data['pemohon_id'] = $data['penduduk_id'] ?? null;
 
         // kalau tabel kamu TIDAK punya kolom penduduk_id, tambahkan:
         // unset($data['penduduk_id']);

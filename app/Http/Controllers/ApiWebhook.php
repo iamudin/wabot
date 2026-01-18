@@ -21,10 +21,11 @@ class ApiWebhook extends Controller
         // ============================
         // Ambil nomor WA
         // ============================
-
+        if(!$request->has('from')){
+            return;
+        }
         $data = $request->all();
         $phone = $data['from'] ?? null;
-            
         if (!$phone)
             return;
         
@@ -34,7 +35,7 @@ class ApiWebhook extends Controller
         $mainMenu = AutoReply::where('key', 'menu')->first();
 
         if (!$mainMenu) {
-            $this->send($phone, "Menu utama tidak ditemukan.");
+            return $this->send($phone, "Menu utama tidak ditemukan.");
             return;
         }
 
@@ -54,7 +55,7 @@ class ApiWebhook extends Controller
                 'last_activity' => now()
             ]);
 
-            $this->send($phone, $mainMenu->value);
+            return $this->send($phone, $mainMenu->value);
             return;
         }
 
@@ -76,7 +77,7 @@ class ApiWebhook extends Controller
                 'session_state' => $mainMenu->id,
                 'last_activity' => now()
             ]);
-            $this->send($phone, $mainMenu->value);
+            return $this->send($phone, $mainMenu->value);
             return;
         }
 
@@ -94,14 +95,14 @@ class ApiWebhook extends Controller
 
             $session->update(['session_state' => $mainMenu->id]);
 
-            $this->send($phone, $mainMenu->value);
+            return $this->send($phone, $mainMenu->value);
             return;
         }
 
         if ($input === 'daftar') {
 
 
-            $this->send($phone, 'anda akan melakukan pendaftaran');
+            return $this->send($phone, 'anda akan melakukan pendaftaran');
             return;
         }
         // ============================
@@ -111,7 +112,7 @@ class ApiWebhook extends Controller
 
         if (!$current) {
             $session->update(['session_state' => $mainMenu->id]);
-            $this->send($phone, $mainMenu->value);
+            return $this->send($phone, $mainMenu->value);
             return;
         }
 
@@ -127,7 +128,7 @@ class ApiWebhook extends Controller
 
             // Harus angka
             if (!ctype_digit($input)) {
-                $this->send($phone, "Silakan pilih *angka* sesuai menu.");
+                return $this->send($phone, "Silakan pilih *angka* sesuai menu.");
                 return;
             }
 
@@ -135,14 +136,14 @@ class ApiWebhook extends Controller
 
             // Validasi pilihan
             if (!isset($children[$index])) {
-                $this->send($phone, "Pilihan tidak valid.\nKetik *menu* untuk kembali.");
+                return $this->send($phone, "Pilihan tidak valid.\nKetik *menu* untuk kembali.");
                 return;
             }
 
             $selected = $children[$index];
 
             // Kirim isi submenu
-            $this->send($phone, $selected->value);
+            return $this->send($phone, $selected->value);
 
             // Ubah state ke submenu yang dipilih
             $session->update(['session_state' => $selected->id]);
@@ -160,24 +161,27 @@ class ApiWebhook extends Controller
                 $session->update(['session_state' => $current->parent_id]);
 
                 $parent = AutoReply::find($current->parent_id);
-                $this->send($phone, $parent->value);
+                return $this->send($phone, $parent->value);
                 return;
             }
 
             // Selain 0 → tolak
-            $this->send($phone, "Ketik *0* untuk kembali ke menu sebelumnya.");
+            return $this->send($phone, "Ketik *0* untuk kembali ke menu sebelumnya.");
             return;
         }
 
         // ================================================================
         // 5) Jika tak dikenali
         // ================================================================
-        $this->send($phone, "Perintah tidak dikenali.\nKetik *menu* untuk kembali.");
+        return $this->send($phone, "Perintah tidak dikenali.\nKetik *menu* untuk kembali.");
     }
 
 
     private function send($phone, $text)
     {
+        $msg = json_decode(json_encode(['admin' => str_replace('\n', "<br>", $text),'user'=>request('message')]));
+        return view('kolom-pesan',compact('msg'));
+
         defer(fn() => Http::post(config('wabot.wa_host') . '/message/send-text', [
             'session' => config('wabot.wa_session'),
             'to' => $phone,

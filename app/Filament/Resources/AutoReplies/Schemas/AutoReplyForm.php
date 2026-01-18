@@ -15,6 +15,7 @@ class AutoReplyForm
         return $schema
             ->components([
                 TextInput::make('key'),
+                TextInput::make('title'),
          
             RichEditor::make('value')
                     ->toolbarButtons([
@@ -40,9 +41,7 @@ class AutoReplyForm
 💊 💉 🩺 🧬 🧪 🍎 🍉 🍌 🍊 🍇 🏃 🚶 🧘 🤸
 ')                    ,
 
-                Select::make('action')
-                    ->options(['reply_value' => 'Reply value', 'aksi' => 'Aksi'])
-                    ->required(),
+             
             ]);
     }
 }

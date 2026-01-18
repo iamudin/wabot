@@ -26,11 +26,6 @@ class PermohonansTable
                     ->label('Pemohon')
                     ->description(fn($record) => $record->penduduk->nik)
                     ->searchable(),
-
-                TextColumn::make('pemohon.nama')
-                    ->label('Pembuat')
-                    ->description(fn($record) => $record->pemohon->nik)
-                    ->searchable(),
                 TextColumn::make('status_permohonan')
                     ->label('Status')
                     ->formatStateUsing(fn ($state) => strtoupper($state))

@@ -1,5 +1,7 @@
 <?php 
 
+use App\Http\Controllers\BotWebHookController;
+use App\Http\Controllers\UploadController;
 use App\Jobs\WaBot;
 use App\Http\Controllers\ApiWebhook;
 use Illuminate\Support\Facades\Http;
@@ -18,6 +20,10 @@ Route::get('coba', function () {
         return $respon;
     });
 });
+
+Route::get('kolom-pesan', function () {
+    return view('upload');
+});
 Route::get('preview-file/{path}', function ($path) {
 
     $path = base64_decode($path);
@@ -27,7 +33,9 @@ Route::get('preview-file/{path}', function ($path) {
         Storage::disk('local')->path($path)
     );
 })->name('file.preview');
-
-Route::prefix('api')->controller(ApiWebhook::class)->group(function () {
+Route::post('upload', [App\Http\Controllers\UploadController::class, 'upload']);
+Route::get('/download/{file}', [UploadController::class, 'download']);
+Route::get('/stream/{file}', [UploadController::class, 'stream']);
+Route::prefix('api')->controller(BotWebHookController::class)->group(function () {
     Route::match(['get','post'],'webhook/{type}', 'webhook')->withoutMiddleware([VerifyCsrfToken::class]);;
 });

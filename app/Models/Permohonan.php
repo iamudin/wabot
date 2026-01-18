@@ -22,7 +22,6 @@ class Permohonan extends Model
         'sesi_berakir',
         'status_permohonan',
         'penduduk_id',
-        'pemohon_id',
     ];
     public static function booted()
     {
@@ -47,7 +46,6 @@ class Permohonan extends Model
             'ditolak_pada' => 'datetime',
             'diselesaikan_pada' => 'datetime',
             'penduduk_id' => 'integer',
-            'pemohon_id' => 'integer',
         ];
     }
 
@@ -66,10 +64,7 @@ class Permohonan extends Model
         return $this->belongsTo(Penduduk::class);
     }
 
-    public function pemohon(): BelongsTo
-    {
-        return $this->belongsTo(Penduduk::class);
-    }
+ 
 
     public function penandatangan(): BelongsTo
     {

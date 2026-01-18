@@ -25,6 +25,7 @@ class AutoReplyRelation extends RelationManager
         return $schema
             ->components([
                 TextInput::make('key')->required(),
+                TextInput::make('title')->required(),
                   RichEditor::make('value')
                     ->toolbarButtons([
                         'bold',
@@ -60,9 +61,7 @@ class AutoReplyRelation extends RelationManager
         );
     }),
 
-                Select::make('action')
-                    ->options(['reply_value' => 'Reply value', 'aksi' => 'Aksi'])
-                    ->required(),
+            
             ]);
     }
     public function table(Table $table): Table

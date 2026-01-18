@@ -13,7 +13,7 @@ class EditPermohonan extends EditRecord
     protected static string $resource = PermohonanResource::class;
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        $data['penduduk_id'] = $this->record->pemohon_id;
+        // $data['penduduk_id'] = $this->record->pemohon_id;
 
         return $data;
     }
@@ -21,7 +21,7 @@ class EditPermohonan extends EditRecord
     // Saat update, tetap samakan pemohon_id dengan penduduk_id
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $data['pemohon_id'] = $data['penduduk_id'] ?? $this->record->pemohon_id;
+        // $data['pemohon_id'] = $data['penduduk_id'] ?? $this->record->pemohon_id;
 
         // kalau tidak ada kolom penduduk_id di DB:
         // unset($data['penduduk_id']);
