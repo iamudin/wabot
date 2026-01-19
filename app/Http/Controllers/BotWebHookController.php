@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Http;
 
 class BotWebHookController extends Controller
 {
-    public function webhook(Request $request)
+    public function webhook(Request $request, $type=null)
     {
-        
+        if($type && $type!='message'){
+            return;
+        }
         $phone = $request->input('from');
         $message = trim($request->input('message'));
       

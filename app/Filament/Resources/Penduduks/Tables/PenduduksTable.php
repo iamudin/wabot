@@ -24,7 +24,7 @@ class PenduduksTable
                     ->searchable(),
                 TextColumn::make('rt.nomor')
                 ->label('RT / RW')
-                ->state(fn($record)=> $record->rt->nomor.' / '.$record->rt->rw->nomor)
+                ->state(fn($record)=> $record->rt?->nomor.' / '.$record->rt?->rw?->nomor)
                   ->searchable(query: function ($query, $search) {
         $query->whereHas('rt', function ($rt) use ($search) {
             $rt->where('nomor', 'like', "%{$search}%")

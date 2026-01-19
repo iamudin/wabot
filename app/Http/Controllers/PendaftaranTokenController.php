@@ -21,10 +21,7 @@ class PendaftaranTokenController extends Controller
         ]);
     }
 
-    public function submit(
-        Request $request,
-        FileCryptoService $crypto
-    ) {
+    public function submit(Request $request) {
         $token = PendaftaranToken::where('token', $request->token)->firstOrFail();
 
         if (!$token->isValid()) {
@@ -40,8 +37,7 @@ class PendaftaranTokenController extends Controller
 
         // 🔐 AMBIL FILE & ENKRIPSI
         $fileContent = file_get_contents($request->file('ktp')->getRealPath());
-
-        $encryptedPayload = $crypto->encrypt($fileContent);
+        $encryptedPayload = (new FileCryptoService)->encrypt($fileContent);
 
         // SIMPAN DATA PENDUDUK
         Penduduk::create([
