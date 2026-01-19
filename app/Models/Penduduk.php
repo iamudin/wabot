@@ -20,6 +20,7 @@ class Penduduk extends Model
         'nik',
         'nama',
         'jenis_kelamin',
+        'file_ktp',
         'alamat',
         'rt_id',
         'agama',
@@ -39,6 +40,7 @@ class Penduduk extends Model
         return [
             'id' => 'integer',
             'rt_id' => 'integer',
+            'file_ktp'=>'array',
             'terdaftar_pada' => 'timestamp',
             'terverifikasi_pada' => 'timestamp',
         ];

@@ -7,6 +7,7 @@ use App\Models\Rw;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\DateTimePicker;
 
 class PendudukForm
@@ -139,7 +140,19 @@ Select::make('rt_id')
                    'Belum Kawin'=>'Belum Kawin'
                 ]),
                 TextInput::make('nomor_whatsapp')
-                    ->required()
+                    ->required(),
+
+                Placeholder::make('ktp_preview')
+                    ->label('Preview KTP')
+                    ->content(fn($record) => new \Illuminate\Support\HtmlString(
+                        $record
+                        ? '<img 
+                src="' . route('penduduk.ktp.stream', $record) . '" 
+                class="max-w-full rounded shadow"
+              >'
+                        : 'File KTP tidak tersedia'
+                    )),
+
             ]);
     }
 }

@@ -70,6 +70,7 @@ class AutoReplyRelation extends RelationManager
             ->defaultSort('key')
             ->columns([
                 TextColumn::make('key'),
+                TextColumn::make('title'),
                 TextColumn::make('value'),
             ])
             ->headerActions([
