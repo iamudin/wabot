@@ -73,7 +73,6 @@ class PermohonanForm
                         'draft' => 'Draft',
                         'baru' => 'Baru',
                         'diproses' => 'Diproses',
-                        'ditolak' => 'Ditolak',
                         'selesai' => 'Selesai'
                     ])
                     ->visibleOn('edit')

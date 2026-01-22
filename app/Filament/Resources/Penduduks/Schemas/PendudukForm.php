@@ -6,6 +6,7 @@ use App\Models\Rt;
 use App\Models\Rw;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\DateTimePicker;
@@ -141,8 +142,17 @@ Select::make('rt_id')
                 ]),
                 TextInput::make('nomor_whatsapp')
                     ->required(),
+Toggle::make('verifikasi_toggle')
+    ->label('Verifikasi Data Penduduk')
+    ->dehydrated(false)
+    ->hidden(fn ($record) => filled($record?->terverifikasi_pada)),
 
+DateTimePicker::make('terverifikasi_pada')
+    ->label('Terverifikasi Pada')
+    ->readOnly()
+    ->visible(fn ($record) => filled($record?->terverifikasi_pada)),    
                 Placeholder::make('ktp_preview')
+                ->visible(fn($record)=> filled($record?->file_ktp))
                     ->label('Preview KTP')
                     ->content(fn($record) => new \Illuminate\Support\HtmlString(
                         $record

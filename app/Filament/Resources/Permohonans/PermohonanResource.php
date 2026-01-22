@@ -4,13 +4,14 @@ namespace App\Filament\Resources\Permohonans;
 
 use BackedEnum;
 use App\Models\Permohonan;
-use Filament\Actions\CreateAction;
 use Filament\Tables\Table;
 use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Actions\CreateAction;
 use Filament\Support\Icons\Heroicon;
 use App\Filament\Resources\Permohonans\Pages\EditPermohonan;
 use App\Filament\Resources\Permohonans\Pages\ListPermohonans;
+use App\Filament\Resources\Permohonans\Pages\PermohonanSurat;
 use App\Filament\Resources\Permohonans\Pages\CreatePermohonan;
 use App\Filament\Resources\Permohonans\Schemas\PermohonanForm;
 use App\Filament\Resources\Permohonans\Tables\PermohonansTable;
@@ -29,7 +30,10 @@ class PermohonanResource extends Resource
         return PermohonanForm::configure($schema);
     }
 
-   
+   public static function canViewAny(): bool
+{
+        return auth()->user()->isAdmin();
+}
 
     public static function table(Table $table): Table
     {
@@ -49,6 +53,7 @@ class PermohonanResource extends Resource
             'index' => ListPermohonans::route('/'),
             'create' => CreatePermohonan::route('/create'),
             'edit' => EditPermohonan::route('/{record}/edit'),
+          
         ];
     }
 }

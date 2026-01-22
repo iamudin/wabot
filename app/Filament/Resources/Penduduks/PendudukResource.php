@@ -22,6 +22,10 @@ class PendudukResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
     protected static ?string $recordTitleAttribute = 'penduduk';
+   public static function canViewAny(): bool
+{
+        return auth()->user()->isAdmin();
+}
 
     public static function form(Schema $schema): Schema
     {

@@ -70,7 +70,7 @@
 <body>
 
     <div class="container">
-        <h2>Permohonan Surat Keterangan Tidak Mampu</h2>
+        <h2>{{ $data->nama_layanan }}</h2>
 
         <form method="POST" action="{{ url('/form-permohonan/sktm') }}">
             @csrf

@@ -26,11 +26,6 @@ class SyaratLayanansRelationManager extends RelationManager
         return $form->schema([
             TextInput::make('kata_kunci')->label('kata_kunci')
     ->required()
-    ->rule(function ($attribute, $value, $fail) {
-        if (!preg_match('/^[A-Za-z0-9_]+$/', $value)) {
-            $fail('Username hanya boleh berisi huruf, angka, dan underscore (_), tanpa spasi.');
-        }
-    })
     ->helperText('Hanya huruf, angka, dan underscore — tanpa spasi.')
                 ->columnSpanFull(),
             TextInput::make('nama')->label('Nama Syarat')->required()

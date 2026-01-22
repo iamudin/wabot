@@ -22,6 +22,8 @@ class Permohonan extends Model
         'sesi_berakir',
         'status_permohonan',
         'penduduk_id',
+        'surat_tte',
+        'ditandatangani_pada'
     ];
     public static function booted()
     {
@@ -44,6 +46,7 @@ class Permohonan extends Model
             'sesi_berakir' => 'timestamp',
             'diproses_pada'=>'datetime',
             'ditolak_pada' => 'datetime',
+            'ditandatangani_pada' => 'datetime',
             'diselesaikan_pada' => 'datetime',
             'penduduk_id' => 'integer',
         ];

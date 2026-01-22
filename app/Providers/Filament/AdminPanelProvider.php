@@ -29,9 +29,10 @@ class AdminPanelProvider extends PanelProvider
     
         return $panel
             ->default()
+            ->globalSearch(false)
             ->maxContentWidth(Width::Full)
-            ->spa()
             ->id('admin')
+            ->spa()
             ->path('')
             ->login()
             ->brandName('Admin Desa')
@@ -47,8 +48,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

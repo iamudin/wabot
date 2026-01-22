@@ -21,6 +21,10 @@ class AutoReplyResource extends Resource
 
     // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
+   public static function canViewAny(): bool
+{
+        return auth()->user()->isAdmin();
+}
 
     protected static ?string $recordTitleAttribute = 'AutoReply';
 

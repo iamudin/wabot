@@ -44,6 +44,10 @@ class PermohonansTable
                     }
                         )
                     ->badge(),
+                     TextColumn::make('ditandatangani_pada')
+                    ->label('Status Tanda Tangan')
+                       ->formatStateUsing(fn ($state) => $state ? 'Sudah Ditandatangani' : 'Belum Ditandatangani')
+                          ->description(fn($state) => $state->format('d F Y H:i T')),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -21,6 +21,10 @@ class KategoriResource extends Resource
     // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolder;
 
+   public static function canViewAny(): bool
+{
+        return auth()->user()->isAdmin();
+}
 
     protected static ?string $recordTitleAttribute = 'kategori';
 

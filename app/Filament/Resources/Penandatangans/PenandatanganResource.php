@@ -26,6 +26,10 @@ class PenandatanganResource extends Resource
     {
         return PenandatanganForm::configure($schema);
     }
+   public static function canViewAny(): bool
+{
+        return auth()->user()->isAdmin();
+}
 
     public static function table(Table $table): Table
     {
