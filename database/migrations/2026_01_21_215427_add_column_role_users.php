@@ -14,11 +14,7 @@ return new class extends Migration
                 Schema::table('users', function (Blueprint $table) {
                 $table->enum('role',['admin','penandatangan'])->default('admin')->nullable();
         });
-       if (Schema::hasColumn('permohonans', 'pemohon_id')) {
-            Schema::table('permohonans', function (Blueprint $table) {
-                $table->dropColumn('pemohon_id');
-            });
-        }
+      
     }
 
     /**

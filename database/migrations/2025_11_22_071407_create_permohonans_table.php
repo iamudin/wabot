@@ -23,7 +23,6 @@ return new class extends Migration
             $table->text('alasan_penolakan')->nullable();
             $table->string('status_permohonan')->default('baru');
             $table->foreignId('penduduk_id')->constrained();
-            $table->foreignId('pemohon_id')->constrained();
             $table->string('file_surat')->nullable();
             $table->string('penandatangan_id')->nullable();
             $table->string('kode_tiket')->nullable();
