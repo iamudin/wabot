@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
     
         return $panel
             ->default()
+            ->spa()
             ->globalSearch(false)
             ->maxContentWidth(Width::Full)
             ->id('admin')
