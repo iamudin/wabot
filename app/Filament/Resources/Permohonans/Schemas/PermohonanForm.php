@@ -133,7 +133,7 @@ class PermohonanForm
             
                         return new HtmlString(<<<HTML
             <div class="space-y-4">
-                <iframe src="{$url}" class="w-100 h-[600px] rounded-lg border" style="width:100%;height:800px"></iframe>
+                <iframe src="https://docs.google.com/viewer?url={$url}?time={time()}&embedded=true" class="w-100 h-[600px] rounded-lg border" style="width:100%;height:800px"></iframe>
             </div>
         HTML);
                     })->modalSubmitAction(false)
