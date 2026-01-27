@@ -95,7 +95,7 @@
     <div class="mt-4 rounded-lg border bg-white">
         <iframe
         style="width:100%;height:70vh"
-            src="{{ route('file.preview',base64_encode($record->surat_tte ?? $record->file_surat)) }}"
+            src="https://docs.google.com/viewer?url={{ route('file.preview',base64_encode($record->surat_tte ?? $record->file_surat)) }}?time={{ time() }}&embedded=true"
             class="w-full h-[75vh] rounded-lg"
         ></iframe>
     </div>
