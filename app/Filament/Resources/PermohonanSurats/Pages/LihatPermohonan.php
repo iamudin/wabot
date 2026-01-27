@@ -6,6 +6,7 @@ use Filament\Actions\Action;
 use App\Services\TtePdfService;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
@@ -71,6 +72,15 @@ public function prosesTTE(): Action
                     ->body('Dokumen berhasil ditandatangani secara elektronik.')
                     ->success()
                     ->send();
+                    defer(fn()=>
+                    Http::post(config('wabot.wa_host').'/message/send-document', [
+            'session' => config('wabot.wa_session'),
+            'to' => $this->record->penduduk->nomor_whatsapp,
+            'text' => 'Surat permohonan anda dengna kode tiket #'.$this->record->kode_tiket.' sudah selesai diproses, silahkan unduh file dokumen berikut :',
+            'document_url' => route('file.preview',base64_encode($this->record->surat_tte)),
+            'document_name' => $this->record->kode_tiket,
+            'is_group'=>false,
+        ]));
             } else {
                 Notification::make()
                     ->title('Gagal TTE')
