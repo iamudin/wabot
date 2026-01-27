@@ -333,7 +333,6 @@ class BotWebHookController extends Controller
         // return view('kolom-pesan', compact('msg'));
 
         // 🔴 Aktifkan jika sudah ke API WhatsApp
-        if($phone=='6289670074770'){
 
         defer(fn() => Http::post(config('wabot.wa_host') . '/message/send-text', [
             'session' => config('wabot.wa_session'),
@@ -345,5 +344,4 @@ class BotWebHookController extends Controller
         return true;
         }
         
-    }
 }
