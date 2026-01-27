@@ -8,6 +8,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
 
 class PermohonansTable
 {
@@ -15,6 +16,9 @@ class PermohonansTable
     public static function configure(Table $table): Table
     {
         return $table
+        ->modifyQueryUsing(fn (Builder $query) =>
+            $query->orderBy('created_at','desc')
+        )
             ->columns([
                 TextColumn::make('kode_tiket')
                     ->prefix('#')

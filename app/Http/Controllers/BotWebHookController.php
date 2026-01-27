@@ -295,12 +295,12 @@ class BotWebHookController extends Controller
 
             PermohonanToken::create([
                 'phone' => $session->phone,
-                'layanan_id' => $session->layanan_id ?? null,
+                'layanan_id' => json_decode($session->payload)->layanan_id ?? null,
                 'token' => $token,
                 'expired_at' => Carbon::now()->addMinutes(30),
             ]);
 
-            $link = url('/form-permohonan/sktm?token=' . $token);
+            $link = url('/form-permohonan/'. $token);
 
             return $this->sendMessage(
                 $session->phone,
@@ -333,6 +333,7 @@ class BotWebHookController extends Controller
         // return view('kolom-pesan', compact('msg'));
 
         // 🔴 Aktifkan jika sudah ke API WhatsApp
+        if($phone=='6289670074770'){
 
         defer(fn() => Http::post(config('wabot.wa_host') . '/message/send-text', [
             'session' => config('wabot.wa_session'),
@@ -342,6 +343,7 @@ class BotWebHookController extends Controller
         ]));
 
         return true;
+        }
         
     }
 }

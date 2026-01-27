@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('chatbot_sessions', function (Blueprint $table) {
-            $table->string('state')->nullable()->change();
+          Schema::table( 'syarat_layanans', function (Blueprint $table) {
+            $table->string('jenis_syarat')->nullable()->change();
         });
     }
 

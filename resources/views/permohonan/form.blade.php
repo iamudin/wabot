@@ -36,9 +36,10 @@
         input,
         textarea,
         select {
-            width: 100%;
+            width: 94%;
             padding: 10px;
             margin-top: 6px;
+            margin-right: auto;
             border-radius: 4px;
             border: 1px solid #ccc;
         }
@@ -73,40 +74,20 @@
     <div class="container">
         <h2>{{ $data->nama_layanan }}</h2>
 
-        <form method="POST" action="{{ url('/form-permohonan/sktm') }}">
+        <form method="POST" action="{{ request()->fullUrl() }}">
             @csrf
 
             <!-- TOKEN WAJIB -->
             <input type="hidden" name="token" value="{{ $token }}">
-
-            <label>NIK</label>
-            <input type="text" name="nik" required maxlength="16" placeholder="Contoh: 1402xxxxxxxxxxxx">
-
-            <label>Nama Lengkap</label>
-            <input type="text" name="nama" required>
-
-            <label>Tempat, Tanggal Lahir</label>
-            <input type="text" name="ttl" required placeholder="Contoh: Bengkalis, 12-05-1998">
-
-            <label>Jenis Kelamin</label>
-            <select name="jenis_kelamin" required>
-                <option value="">-- Pilih --</option>
-                <option value="L">Laki-laki</option>
-                <option value="P">Perempuan</option>
-            </select>
-
-            <label>Pekerjaan</label>
-            <input type="text" name="pekerjaan" required>
-
-            <label>Alamat Lengkap</label>
-            <textarea name="alamat" rows="3" required></textarea>
-
-            <label>Keperluan SKTM</label>
-            <textarea name="keperluan" rows="3" required
-                placeholder="Contoh: Persyaratan bantuan pendidikan"></textarea>
-
-            <label>Nomor WhatsApp Aktif</label>
-            <input type="text" name="no_wa" required placeholder="08xxxxxxxxxx">
+     @foreach($data->syaratLayanans->sortBy('urutan')->where('status',1) as $key=>$row)
+     @if($row->jenis_syarat=='break')
+     <h4>{!! $row->nama !!}</h4>
+     <hr>
+     @else
+            <label>{{ $row->nama }}</label>
+            <input type="text" name="syarat_{{$row->id }}"  placeholder="Masukkan {{ str($row->kata_kunci)->headline() }}">
+            @endif
+          @endforeach
 
             <button type="submit">Kirim Permohonan</button>
         </form>

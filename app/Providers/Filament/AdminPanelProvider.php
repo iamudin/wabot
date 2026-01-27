@@ -32,7 +32,6 @@ class AdminPanelProvider extends PanelProvider
             ->globalSearch(false)
             ->maxContentWidth(Width::Full)
             ->id('admin')
-            ->spa()
             ->path('')
             ->login()
             ->brandName('Admin Desa')

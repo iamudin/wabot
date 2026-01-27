@@ -19,6 +19,8 @@ class DataPermohonan extends Model
         'permohonan_id',
         'syarat_layanan_id',
         'keterangan',
+        'is_valid',
+        'key',
         'koreksidata',
         'status',
     ];

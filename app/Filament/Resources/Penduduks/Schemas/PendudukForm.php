@@ -4,10 +4,12 @@ namespace App\Filament\Resources\Penduduks\Schemas;
 
 use App\Models\Rt;
 use App\Models\Rw;
+use Filament\Actions\Action;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\DateTimePicker;
 
@@ -18,10 +20,13 @@ class PendudukForm
         return [
             TextInput::make('nik')
                 ->required(),
+               
             TextInput::make('nama')
                 ->required(),
+                 TextInput::make('tempat_tanggal_lahir')
+                ->required(),
             Select::make('jenis_kelamin')
-                ->options(['L' => 'L', 'P' => 'P'])
+                ->options(['L' => 'Laki laki', 'P' => 'Perempuan'])
                 ->required(),
             TextInput::make('alamat'),
             Select::make('rw_filter')
@@ -74,6 +79,10 @@ class PendudukForm
                 'Kawin' => 'Kawin',
                 'Belum Kawin' => 'Belum Kawin'
             ]),
+                 TextInput::make('kewarganegaraan')
+                    ->required(),
+                       TextInput::make('pekerjaan')
+                    ->required(),
             TextInput::make('nomor_whatsapp')
                 ->required()
         ];
@@ -82,13 +91,16 @@ class PendudukForm
     {
         return $schema
             ->components([
+
                 TextInput::make('nik')
                     ->required(),
                 TextInput::make('nama')
                     ->required(),
-                Select::make('jenis_kelamin')
-                    ->options(['L' => 'L', 'P' => 'P'])
-                    ->required(),
+                           TextInput::make('tempat_tanggal_lahir')
+                ->required(),
+               Select::make('jenis_kelamin')
+                ->options(['L' => 'Laki laki', 'P' => 'Perempuan'])
+                ->required(),
                 TextInput::make('alamat'),
 Select::make('rw_filter')
     ->label('RW')
@@ -140,6 +152,10 @@ Select::make('rt_id')
                    'Kawin' =>'Kawin',
                    'Belum Kawin'=>'Belum Kawin'
                 ]),
+                TextInput::make('kewarganegaraan')
+                    ->required(),
+                       TextInput::make('pekerjaan')
+                    ->required(),
                 TextInput::make('nomor_whatsapp')
                     ->required(),
 Toggle::make('verifikasi_toggle')

@@ -32,21 +32,12 @@ class SyaratLayanansRelationManager extends RelationManager
                ->columnSpanFull(),
             Textarea::make('keterangan')->label('Keterangan')->required()
                ->columnSpanFull(),
-
-
-            Select::make('sumber_data')->label('Sumber Data')
-                ->options(
-                    [
-                        'user' => 'User',
-                        'database' => 'Database'
-                    ]
-                ),
             Select::make('jenis_syarat')->label('Jenis Data')
                 ->options(
                     [
+                        'break' => 'Break',
                         'file' => 'File',
                         'text' => 'Text',
-                        'array' => 'Array',
                     ]
                 ),
             TextInput::make('urutan')->numeric(),
@@ -61,7 +52,7 @@ class SyaratLayanansRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('row_number')->label('#')->rowIndex(),
                 TextColumn::make('nama')->label('Nama Syarat'),
-                TextColumn::make('sumber_data')->label('Sumber Data'),
+                TextColumn::make('jenis_syarat')->label('Jenis Syarat'),
             ])
             ->headerActions([
                 CreateAction::make(),

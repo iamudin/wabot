@@ -96,6 +96,7 @@ class PermohonanForm
                                 break;
                         }
                     }),
+                             Textinput::make('nomor_surat')->placeholder('Contoh : SKTM/XX/2026'),
                     Textarea::make('alasan_penolakan')
     ->label('Alasan Penolakan')
     ->visible(fn (callable $get) => $get('status_permohonan') === 'ditolak')
@@ -108,8 +109,10 @@ class PermohonanForm
     ->visible(fn (callable $get) => $get('status_permohonan') === 'selesai')
     ->required(fn (callable $get) => $get('status_permohonan') === 'selesai') // wajib isi jika ditolak
     ->columnSpanFull(),
+
                 FileUpload::make('file_surat')
                     ->label('Upload Surat (PDF)')
+                    ->disk('public')
                     ->directory('permohonan/file-surat')
                     ->preserveFilenames(false)
                     ->acceptedFileTypes(['application/pdf'])    // hanya izinkan PDF

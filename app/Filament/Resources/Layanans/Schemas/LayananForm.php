@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Layanans\Schemas;
 
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Toggle;
+use Illuminate\Support\Str;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 
 class LayananForm
 {
@@ -22,6 +24,15 @@ class LayananForm
                 Textarea::make('keterangan')
                     ->required()
                     ->columnSpanFull(),
+                     FileUpload::make('template_surat')
+                    ->label('Upload Template Surat (.DOCX)')
+                    ->directory('layanan/template-surat')
+                    ->preserveFilenames(false)
+                    ->acceptedFileTypes(['application/vnd.openxmlformats-officedocument.wordprocessingml.document'])    // hanya izinkan .docx
+                    ->getUploadedFileNameForStorageUsing(
+                        fn($file) =>
+                        (string) Str::uuid() . '.' . $file->getClientOriginalExtension()
+                    )   ,         
                 Toggle::make('status')
                     ->required(),
             ]);

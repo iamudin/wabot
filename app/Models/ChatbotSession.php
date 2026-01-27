@@ -9,6 +9,7 @@ class ChatbotSession extends Model
     protected $fillable = [
         'phone',
         'state',
+        'payload',
         'current_parent_id',
         'last_activity'
     ];

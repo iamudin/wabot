@@ -24,7 +24,6 @@ class CreatePermohonan extends CreateRecord
         $permohonan = $this->record;
 
         $syarats = \App\Models\SyaratLayanan::where('layanan_id', $permohonan->layanan_id)
-            ->where('sumber_data', 'user')
             ->where('status', true)
             ->orderBy('urutan')
             ->get();
@@ -32,10 +31,10 @@ class CreatePermohonan extends CreateRecord
         foreach ($syarats as $syarat) {
             \App\Models\DataPermohonan::create([
                 'permohonan_id' => $permohonan->id,
+                'key' => $syarat->kata_kunci,
                 'syarat_layanan_id' => $syarat->id,
                 'keterangan' => null,
                 'koreksidata' => null,
-                'status' => 'menunggu',
             ]);
         }
     }

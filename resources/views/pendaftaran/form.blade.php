@@ -23,6 +23,8 @@
 
             <label>Nama Lengkap</label>
             <input type="text" name="nama" required style="width:100%;padding:8px">
+        <label>Tempate Tanggal Lahir</label>
+            <input type="text" name="tempat_tanggal_lahir" required style="width:100%;padding:8px">
 
             <label>Alamat Lengkap</label>
             <textarea name="alamat" required style="width:100%;padding:8px"></textarea>

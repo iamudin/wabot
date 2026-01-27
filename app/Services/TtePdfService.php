@@ -112,7 +112,7 @@ public function generate($permohonan)
 }
 
     public function sign($permohonan, string $passphrase): array {
-        $pdfPath = Storage::disk('local')->path($permohonan->file_surat);
+        $pdfPath = Storage::disk('public')->path($permohonan->file_surat);
 
         if (!is_file($pdfPath)) {
             return $this->fail('File PDF tidak ditemukan.');

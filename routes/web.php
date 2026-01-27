@@ -31,16 +31,19 @@ Route::get('kolom-pesan', function () {
 Route::get('preview-file/{path}', function ($path) {
 
     $path = base64_decode($path);
-    abort_if(!$path || !Storage::disk('local')->exists($path), 404);
+    abort_if(!$path || !Storage::disk('public')->exists($path), 404);
 
     return response()->file(
-        Storage::disk('local')->path($path)
+        Storage::disk('public')->path($path)
     );
 })->name('file.preview');
 Route::post('upload', [App\Http\Controllers\UploadController::class, 'upload']);
 Route::get('/download/{file}', [UploadController::class, 'download']);
 Route::get('/stream/{file}', [UploadController::class, 'stream']);
-Route::get('/form-permohonan', [PermohonanTokenController::class, 'show']);
+Route::get('/form-permohonan/{token}', [PermohonanTokenController::class, 'show']);
+Route::get('/cetak-permohonan/{id}', [PermohonanTokenController::class, 'cetakPermohonan']);
+Route::get('/hasil-surat/{filename}', [PermohonanTokenController::class, 'streamHasilSurat'])->name('showfiledocx');
+Route::post('/form-permohonan/{token}', [PermohonanTokenController::class, 'submit']);
 Route::get('/pendaftaran', [PendaftaranTokenController::class, 'show']);
 Route::post('/pendaftaran-submit', [PendaftaranTokenController::class, 'submit']);
 Route::prefix('api')->controller(BotWebHookController::class)->group(function () {

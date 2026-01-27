@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Layanan;
 use Illuminate\Database\Eloquent\Model;
 
 class PermohonanToken extends Model
@@ -22,5 +23,9 @@ class PermohonanToken extends Model
     public function isValid(): bool
     {
         return !$this->used && $this->expired_at->isFuture();
+    }
+      public function layanan()
+    {
+        return $this->belongsTo(Layanan::class);
     }
 }

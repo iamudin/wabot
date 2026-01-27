@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Forms\Components\Placeholder;
 use Filament\Resources\RelationManagers\RelationManager;
 
@@ -22,8 +23,7 @@ class DataPermohonanRelationManager extends RelationManager
     protected static string $relationship = 'dataPermohonans';
     protected static ?string $title = 'Data Persyaratan';
 
-    public function form(Schema $form): Schema
-    {
+    public function form(Schema $form): Schema {
         return $form
             ->schema([
 
@@ -96,7 +96,7 @@ class DataPermohonanRelationManager extends RelationManager
                          */
 
                         // Kalau ada file lama → hapus
-                        if ($record?->keterangan && Storage::exists($record->keterangan)){
+                        if ($record?->keterangan && Storage::exists($record->keterangan)) {
                             Storage::delete($record->keterangan);
                         }
 
@@ -117,37 +117,34 @@ class DataPermohonanRelationManager extends RelationManager
     }
 
 
-    public function table(Tables\Table $table): Tables\Table
-    {
+    public function table(Tables\Table $table): Tables\Table {
         return $table
             ->query(
-                $this->getRelationship()->getQuery()->with('syaratLayanan')
+                $this->getRelationship()->getQuery()->whereHas('syaratLayanan', function ($q) {
+                    $q->where('jenis_syarat', '!=', 'break')->orderBy('urutan','asc');
+                })
             )
             ->columns([
-                TextColumn::make('syaratLayanan.nama')
+                TextColumn::make('syaratLayanan.kata_kunci')
+                    ->description(fn($record) => $record->keterangan)
+                    ->state(fn($record) => str($record->syaratLayanan->kata_kunci)->headline())
                     ->label('Syarat')
                     ->sortable(),
-                TextColumn::make('keterangan'),
-                
-                TextColumn::make('status')
-                    ->badge()
-                    ->colors([
-                        'warning' => 'menunggu',
-                        'success' => 'dijawab',
-                    ]),
 
-IconColumn::make('is_valid')->label('Data Valid')
-    ->boolean()            // otomatis tampil ✔ atau ✖
-    ->trueIcon('heroicon-o-check-circle')
-    ->falseIcon('heroicon-o-x-circle')
-   ,
-   TextColumn::make('updated_at')
+
+                ToggleColumn::make('is_valid')
+                    ->label('Valid')
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->onIcon('heroicon-o-check-circle')
+                    ->offIcon('heroicon-o-x-circle'),
+                TextColumn::make('updated_at')
                     ->label('Update Terakhir')
                     ->dateTime('d M Y H:i'),
             ])
             ->headerActions([])
             ->actions([
-                EditAction::make()->iconButton(),
+                EditAction::make()->iconButton()->visible(fn($record) => $record->syaratLayanan->jenis_syarat != 'break'),
             ])
             ->bulkActions([]);
     }

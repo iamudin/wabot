@@ -22,6 +22,9 @@ class Permohonan extends Model
         'sesi_berakir',
         'status_permohonan',
         'penduduk_id',
+        'diajukan_pada',
+        'hasil_docx',
+        'kode_tiket',
         'surat_tte',
         'ditandatangani_pada'
     ];
