@@ -106,4 +106,10 @@ class PermohonanTokenController extends Controller
         ]));
         return view('permohonan.sukses');
     }
+
+    function validasi($kode_tiket){
+        $data = Permohonan::where('kode_tiket', $kode_tiket)->first();
+        abort_if(!$data, 404);
+        return view('permohonan.validasi', compact('data'));
+    }
 }

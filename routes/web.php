@@ -44,6 +44,7 @@ Route::get('/form-permohonan/{token}', [PermohonanTokenController::class, 'show'
 Route::get('/cetak-permohonan/{id}', [PermohonanTokenController::class, 'cetakPermohonan']);
 Route::get('/hasil-surat/{filename}', [PermohonanTokenController::class, 'streamHasilSurat'])->name('showfiledocx');
 Route::post('/form-permohonan/{token}', [PermohonanTokenController::class, 'submit']);
+Route::get('/surat/{kode_tiket}', [PermohonanTokenController::class, 'validasi']);
 Route::get('/pendaftaran', [PendaftaranTokenController::class, 'show']);
 Route::post('/pendaftaran-submit', [PendaftaranTokenController::class, 'submit']);
 Route::prefix('api')->controller(BotWebHookController::class)->group(function () {
