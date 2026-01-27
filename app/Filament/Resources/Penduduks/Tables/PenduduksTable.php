@@ -22,17 +22,11 @@ class PenduduksTable
                     ->state(fn($record)=>$record->jenis_kelamin=='L' ? 'Laki-laki' : 'Perempuan'),
                 TextColumn::make('alamat')
                     ->searchable(),
-                TextColumn::make('rt.nomor')
-                ->label('RT / RW')
-                ->state(fn($record)=> $record->rt?->nomor.' / '.$record->rt?->rw?->nomor)
-                  ->searchable(query: function ($query, $search) {
-        $query->whereHas('rt', function ($rt) use ($search) {
-            $rt->where('nomor', 'like', "%{$search}%")
-               ->orWhereHas('rw', function ($rw) use ($search) {
-                   $rw->where('nomor', 'like', "%{$search}%");
-               });
-        });
-    }),
+                TextColumn::make('rt')
+                ->label('RT'),
+                TextColumn::make('rw')
+                ->label('RW'),
+              
                 TextColumn::make('agama')
                     ->searchable(),
                 TextColumn::make('status_kawin')

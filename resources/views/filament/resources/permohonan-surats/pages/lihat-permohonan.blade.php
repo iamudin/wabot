@@ -29,7 +29,7 @@
             </div>
               <div>
                 <dt class="text-gray-500">RT/RW</dt>
-                <dd class="font-medium" style="color:orange">{{ $record->penduduk?->rt?->nomor }} / {{ $record->penduduk?->rt?->rw?->nomor }}</dd>
+                <dd class="font-medium" style="color:orange">{{ $record->penduduk->rt }} / {{$record->penduduk->rw}}</dd>
             </div>
                 <div>
                 <dt class="text-gray-500">Kontak</dt>

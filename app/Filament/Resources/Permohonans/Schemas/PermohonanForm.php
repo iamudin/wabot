@@ -51,7 +51,7 @@ class PermohonanForm
                     ->preload()
                     ->getOptionLabelFromRecordUsing(
                         fn($record) =>
-                        "<div>{$record->nik}<br>{$record->nama}<br>{$record->alamat}<br>RT {$record->rt?->nomor} / RW {$record->rt?->rw?->nomor}</div>"
+                        "<div>{$record->nik}<br>{$record->nama}<br>{$record->alamat}<br>RT {$record->rt} / RW {$record->rw}</div>"
                     )
                        ->searchable()
     ->createOptionForm(fn () => PendudukForm::form())   // ✅ panggil schema form

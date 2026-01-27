@@ -29,45 +29,49 @@ class PendudukForm
                 ->options(['L' => 'Laki laki', 'P' => 'Perempuan'])
                 ->required(),
             TextInput::make('alamat'),
-            Select::make('rw_filter')
-                ->label('RW')
-                ->options(
-                    RW::query()->pluck('nomor', 'id')->mapWithKeys(fn($v, $k) => [(int) $k => $v]) // ✅ pastikan key integer
-                )
-                ->afterStateHydrated(function (callable $set, $record) {   // ✅ ini yang memastikan tampil
-                    if ($record && $record->rt) {
-                        $set('rw_filter', $record->rt->rw_id);
-                    }
-                })
-                ->getOptionLabelUsing(fn($value) => RW::find($value)?->nomor)
-                ->preload()
-                ->reactive()
-                ->afterStateUpdated(fn(callable $set) => $set('rt_id', null))
-                ->dehydrated(false),
+                TextInput::make('rt')
+                ->required(),
+                 TextInput::make('rw')
+                ->required(),
+            // Select::make('rw_filter')
+            //     ->label('RW')
+            //     ->options(
+            //         RW::query()->pluck('nomor', 'id')->mapWithKeys(fn($v, $k) => [(int) $k => $v]) // ✅ pastikan key integer
+            //     )
+            //     ->afterStateHydrated(function (callable $set, $record) {   // ✅ ini yang memastikan tampil
+            //         if ($record && $record->rt) {
+            //             $set('rw_filter', $record->rt->rw_id);
+            //         }
+            //     })
+            //     ->getOptionLabelUsing(fn($value) => RW::find($value)?->nomor)
+            //     ->preload()
+            //     ->reactive()
+            //     ->afterStateUpdated(fn(callable $set) => $set('rt_id', null))
+            //     ->dehydrated(false),
 
 
 
-            Select::make('rt_id')
-                ->label('RT')
-                ->relationship(
-                    name: 'rt',
-                    titleAttribute: 'nomor', // tampilkan nomor, bukan id
-                    modifyQueryUsing: function ($query, callable $get, $record) {
-                        $rwId = $get('rw_filter');
+            // Select::make('rt_id')
+            //     ->label('RT')
+            //     ->relationship(
+            //         name: 'rt',
+            //         titleAttribute: 'nomor', // tampilkan nomor, bukan id
+            //         modifyQueryUsing: function ($query, callable $get, $record) {
+            //             $rwId = $get('rw_filter');
 
-                        // saat edit, jika belum memilih RW, pakai RW dari RT existing
-                        if (!$rwId && $record) {
-                            $rwId = $record->rt?->rw_id;
-                        }
+            //             // saat edit, jika belum memilih RW, pakai RW dari RT existing
+            //             if (!$rwId && $record) {
+            //                 $rwId = $record->rt?->rw_id;
+            //             }
 
-                        if ($rwId) {
-                            $query->where('rw_id', $rwId);
-                        }
-                    }
-                )
-                ->required()
-                ->reactive()
-                ->preload(), // agar label RT tampil langsung saat edit
+            //             if ($rwId) {
+            //                 $query->where('rw_id', $rwId);
+            //             }
+            //         }
+            //     )
+            //     ->required()
+            //     ->reactive()
+            //     ->preload(), // agar label RT tampil langsung saat edit
 
             Select::make('agama')->options([
                 'Islam' => 'Islam',
@@ -102,45 +106,45 @@ class PendudukForm
                 ->options(['L' => 'Laki laki', 'P' => 'Perempuan'])
                 ->required(),
                 TextInput::make('alamat'),
-Select::make('rw_filter')
-    ->label('RW')
-    ->options(
-        RW::query()->pluck('nomor', 'id')->mapWithKeys(fn ($v, $k) => [(int) $k => $v]) // ✅ pastikan key integer
-    )
-    ->afterStateHydrated(function (callable $set, $record) {   // ✅ ini yang memastikan tampil
-        if ($record && $record->rt) {
-            $set('rw_filter', $record->rt->rw_id);
-        }
-    })
-    ->getOptionLabelUsing(fn ($value) => RW::find($value)?->nomor)
-    ->preload()
-    ->reactive()
-    ->afterStateUpdated(fn (callable $set) => $set('rt_id', null))
-    ->dehydrated(false),
+// Select::make('rw_filter')
+//     ->label('RW')
+//     ->options(
+//         RW::query()->pluck('nomor', 'id')->mapWithKeys(fn ($v, $k) => [(int) $k => $v]) // ✅ pastikan key integer
+//     )
+//     ->afterStateHydrated(function (callable $set, $record) {   // ✅ ini yang memastikan tampil
+//         if ($record && $record->rt) {
+//             $set('rw_filter', $record->rt->rw_id);
+//         }
+//     })
+//     ->getOptionLabelUsing(fn ($value) => RW::find($value)?->nomor)
+//     ->preload()
+//     ->reactive()
+//     ->afterStateUpdated(fn (callable $set) => $set('rt_id', null))
+//     ->dehydrated(false),
 
 
 
-Select::make('rt_id')
-    ->label('RT')
-    ->relationship(
-        name: 'rt',
-        titleAttribute: 'nomor', // tampilkan nomor, bukan id
-        modifyQueryUsing: function ($query, callable $get, $record) {
-            $rwId = $get('rw_filter');
+// Select::make('rt_id')
+//     ->label('RT')
+//     ->relationship(
+//         name: 'rt',
+//         titleAttribute: 'nomor', // tampilkan nomor, bukan id
+//         modifyQueryUsing: function ($query, callable $get, $record) {
+//             $rwId = $get('rw_filter');
 
-            // saat edit, jika belum memilih RW, pakai RW dari RT existing
-            if (!$rwId && $record) {
-                $rwId = $record->rt?->rw_id;
-            }
+//             // saat edit, jika belum memilih RW, pakai RW dari RT existing
+//             if (!$rwId && $record) {
+//                 $rwId = $record->rt?->rw_id;
+//             }
 
-            if ($rwId) {
-                $query->where('rw_id', $rwId);
-            }
-        }
-    )
-    ->required()
-    ->reactive()
-    ->preload(), // agar label RT tampil langsung saat edit
+//             if ($rwId) {
+//                 $query->where('rw_id', $rwId);
+//             }
+//         }
+//     )
+//     ->required()
+//     ->reactive()
+//     ->preload(), // agar label RT tampil langsung saat edit
 
                 Select::make('agama')->options([
                    'Islam' => 'Islam',

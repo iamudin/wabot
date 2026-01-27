@@ -44,6 +44,13 @@ class PendaftaranTokenController extends Controller
             'nik' => $request->nik,
             'nama' => $request->nama,
             'alamat' => $request->alamat,
+            'rt' => $request->rt,
+            'rw' => $request->rw,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'kewarganegaraan' => $request->kewarganegaraan,
+            'agama' => $request->agama,
+            'pekerjaan' => $request->pekerjaan,
+            'status_kawin' => $request->status_kawin,
             'nomor_whatsapp' => $token->phone, // dari token
             'file_ktp' => $encryptedPayload, // 🔥 ENKRIPSI
         ]);
