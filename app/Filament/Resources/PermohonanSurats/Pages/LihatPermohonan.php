@@ -66,21 +66,21 @@ public function prosesTTE(): Action
                     'surat_tte'            => $result['path'],
                     'ditandatangani_pada'  => now(),
                 ]);
-
-                Notification::make()
-                    ->title('Berhasil TTE')
-                    ->body('Dokumen berhasil ditandatangani secara elektronik.')
-                    ->success()
-                    ->send();
-                    defer(fn()=>
+    defer(fn()=>
                     Http::post(config('wabot.wa_host').'/message/send-document', [
             'session' => config('wabot.wa_session'),
             'to' => $this->record->penduduk->nomor_whatsapp,
             'text' => 'Surat permohonan anda dengna kode tiket #'.$this->record->kode_tiket.' sudah selesai diproses, silahkan unduh file dokumen berikut :',
             'document_url' => route('file.preview',base64_encode($this->record->surat_tte)),
-            'document_name' => $this->record->kode_tiket,
+            'document_name' => $this->record->kode_tiket.'.pdf',
             'is_group'=>false,
         ]));
+                Notification::make()
+                    ->title('Berhasil TTE')
+                    ->body('Dokumen berhasil ditandatangani secara elektronik.')
+                    ->success()
+                    ->send();
+                
             } else {
                 Notification::make()
                     ->title('Gagal TTE')
