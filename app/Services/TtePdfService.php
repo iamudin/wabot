@@ -192,7 +192,7 @@ public function generate($permohonan)
         $namaFile = 'signed_' . basename($filename);
         $path = '/permohonan/file-surat/' . $namaFile;
 
-        Storage::disk('local')->put(
+        Storage::disk('public')->put(
             $path,
             $pdfContent
         );
