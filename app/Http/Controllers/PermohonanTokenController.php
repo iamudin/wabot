@@ -7,6 +7,7 @@ use App\Models\Permohonan;
 use Illuminate\Http\Request;
 use App\Models\DataPermohonan;
 use App\Models\PermohonanToken;
+use Illuminate\Support\Facades\Http;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -97,7 +98,12 @@ class PermohonanTokenController extends Controller
         }
 
         $token->update(['used' => true]);
-
+         defer(fn() => Http::post(config('wabot.wa_host') . '/message/send-text', [
+            'session' => config('wabot.wa_session'),
+            'to' => $permohonan->penduduk->nomor_whatsapp,
+            'text' => 'Permohonan '.$permohonan->layanan->nama_layanan.' anda telah kami terima dengan kode tiket #'.$permohonan->kode_tiket.'.\r Akan kami proses 1x24 jam. mohon tunggu informasi selanjutnya. \r Terima kasih telah menggunakan layanan kami.',
+            'is_group' => false,
+        ]));
         return view('permohonan.sukses');
     }
 }
