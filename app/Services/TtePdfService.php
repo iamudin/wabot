@@ -127,11 +127,11 @@ public function generate($permohonan)
                 [
                     "tampilan" => "VISIBLE",
                     "imageBase64" => "" . $this->generate($permohonan) . "",
-                    "page" => 1,
-                    "originX" => 380,
-                    "originY" => 650,
-                    "width" => 180,
-                    "height" => 70,
+                    "page" => config('wabot.page'),
+                    "originX" => config('wabot.originX'),
+                    "originY" => config('wabot.originY'),
+                    "width" => config('wabot.width'),
+                    "height" => config('wabot.height'),
                     "reason" => "Tanda tangan elektronik untuk surat milik {$permohonan->penduduk->nik} untuk {$permohonan->layanan->nama_layanan}",
                 ]
             ],
