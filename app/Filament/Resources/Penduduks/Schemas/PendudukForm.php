@@ -106,6 +106,10 @@ class PendudukForm
                 ->options(['L' => 'Laki laki', 'P' => 'Perempuan'])
                 ->required(),
                 TextInput::make('alamat'),
+                    TextInput::make('rt')
+                ->required(),
+                 TextInput::make('rw')
+                ->required(),
 // Select::make('rw_filter')
 //     ->label('RW')
 //     ->options(
