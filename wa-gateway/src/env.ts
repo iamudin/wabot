@@ -1,5 +1,12 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+import path from "path";
+const envPath = path.resolve(process.cwd(), ".env");
+console.log("Looking for .env at:", envPath);
+const result = dotenv.config({ path: envPath });
+console.log("dotenv result:", result);
 import { z } from "zod";
+
+console.log("WEBHOOK_BASE_URL:", process.env.WEBHOOK_BASE_URL);
 
 export const env = z
   .object({

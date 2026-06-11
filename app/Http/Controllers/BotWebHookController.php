@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Http;
 
 class BotWebHookController extends Controller
 {
-    public function webhook(Request $request, $type=null)
+    public function webhook(Request $request, $type = null)
     {
-        if($type && $type!='message'){
+        if ($type && $type != 'message') {
             return;
         }
         $phone = $request->input('from');
         $message = trim($request->input('message'));
-      
+
         $session = ChatbotSession::firstOrCreate(
             ['phone' => $phone],
             [
@@ -73,10 +73,10 @@ class BotWebHookController extends Controller
             return $this->sendMessage(
                 $session->phone,
                 "📝 *Pendaftaran Penduduk Desa*\n\n" .
-                "Silakan isi formulir melalui link berikut:\n" .
-                "$link\n\n" .
-                "⏳ Berlaku 30 menit\n" 
-                
+                    "Silakan isi formulir melalui link berikut:\n" .
+                    "$link\n\n" .
+                    "⏳ Berlaku 30 menit\n"
+
             );
         }
 
@@ -112,13 +112,26 @@ class BotWebHookController extends Controller
             $session->update(['state' => 'layanan_list']);
             return $this->sendDaftarLayanan($session->phone);
         }
-     
+
         return $this->sendMessage(
             $session->phone,
-            "🌾 *WhatsApp Desa*\n\n" .
-            "1. Informasi Desa\n" .
-            "2. Layanan Surat"
+            "🌾 *WhatsApp Desa Tameran*\n\n" .
+                "👋 Selamat Datang!\n\n" .
+                "Terima kasih telah menggunakan layanan chatbot Desa Tameran.\n" .
+                "Sistem ini dirancang untuk membantu masyarakat memperoleh informasi dan layanan desa secara cepat dan mudah.\n\n" .
+                "📋 *Menu Utama*\n\n" .
+                "1️⃣ Informasi Desa\n" .
+                "2️⃣ Layanan Surat\n\n" .
+                "Silakan ketik angka menu yang ingin dipilih.\n\n" .
+                "🙏 Terima kasih."
         );
+
+        // return $this->sendMessage(
+        //     $session->phone,
+        //     "🌾 *WhatsApp Desa Tameran*\n\n" .
+        //     "1. Informasi Desa\n" .
+        //     "2. Layanan Surat"
+        // );
     }
 
     /* =======================
@@ -144,9 +157,15 @@ class BotWebHookController extends Controller
 
                 return $this->sendMessage(
                     $session->phone,
-                    "🌾 *WhatsApp Desa*\n\n" .
-                    "1. Informasi Desa\n" .
-                    "2. Layanan Surat"
+                    "🌾 *WhatsApp Desa Tameran*\n\n" .
+                        "👋 Selamat Datang!\n\n" .
+                        "Terima kasih telah menggunakan layanan chatbot Desa Tameran.\n" .
+                        "Sistem ini dirancang untuk membantu masyarakat memperoleh informasi dan layanan desa secara cepat dan mudah.\n\n" .
+                        "📋 *Menu Utama*\n\n" .
+                        "1️⃣ Informasi Desa\n" .
+                        "2️⃣ Layanan Surat\n\n" .
+                        "Silakan ketik angka menu yang ingin dipilih.\n\n" .
+                        "🙏 Terima kasih."
                 );
             }
 
@@ -171,7 +190,7 @@ class BotWebHookController extends Controller
             return $this->sendMessage(
                 $session->phone,
                 "❌ Pilihan tidak tersedia\n\n" .
-                $this->buildInfoMenu($parentId)
+                    $this->buildInfoMenu($parentId)
             );
         }
 
@@ -227,7 +246,7 @@ class BotWebHookController extends Controller
     private function sendDaftarLayanan($phone)
     {
         $layanan = Layanan::where('status', 1)->get();
-
+ 
         $text = "📄 *Layanan Surat*\n\n";
         foreach ($layanan as $i => $l) {
             $text .= ($i + 1) . ". " . $l->nama_layanan . "\n";
@@ -253,9 +272,9 @@ class BotWebHookController extends Controller
         return $this->sendMessage(
             $session->phone,
             "📌 *{$layanan[$index]->nama_layanan}*\n\n" .
-            $layanan[$index]->keterangan.
-            "\n\nApakah Anda ingin mengajukan?\n" .
-            "1. Ya\n2. Tidak"
+                $layanan[$index]->keterangan .
+                "\n\nApakah Anda ingin mengajukan?\n" .
+                "1. Ya\n2. Tidak"
         );
     }
     private function generatePendaftaranToken()
@@ -283,10 +302,10 @@ class BotWebHookController extends Controller
                 return $this->sendMessage(
                     $session->phone,
                     "⚠️ *Data Anda belum terdaftar sebagai penduduk desa*\n\n" .
-                    "Untuk mengajukan layanan, silakan melakukan pendaftaran terlebih dahulu.\n\n" .
-                    "Ketik:\n" .
-                    "1️⃣ Ya, daftar sekarang\n" .
-                    "2️⃣ Tidak, batal"
+                        "Untuk mengajukan layanan, silakan melakukan pendaftaran terlebih dahulu.\n\n" .
+                        "Ketik:\n" .
+                        "1️⃣ Ya, daftar sekarang\n" .
+                        "2️⃣ Tidak, batal"
                 );
             }
 
@@ -300,14 +319,14 @@ class BotWebHookController extends Controller
                 'expired_at' => Carbon::now()->addMinutes(30),
             ]);
 
-            $link = url('/form-permohonan/'. $token);
+            $link = url('/form-permohonan/' . $token);
 
             return $this->sendMessage(
                 $session->phone,
                 "✅ *Permohonan diproses*\n\n" .
-                "Silakan isi formulir melalui link berikut (berlaku 30 menit):\n" .
-                "$link\n\n" .
-                "_Link hanya dapat digunakan satu kali_"
+                    "Silakan isi formulir melalui link berikut (berlaku 30 menit):\n" .
+                    "$link\n\n" .
+                    "_Link hanya dapat digunakan satu kali_"
             );
         }
 
@@ -342,6 +361,5 @@ class BotWebHookController extends Controller
         ]));
 
         return true;
-        }
-        
+    }
 }
