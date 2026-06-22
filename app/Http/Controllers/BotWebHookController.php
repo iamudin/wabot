@@ -245,7 +245,7 @@ class BotWebHookController extends Controller
      * ======================= */
     private function sendDaftarLayanan($phone)
     {
-        $layanan = Layanan::where('status', 1)->get();
+        $layanan = Layanan::where('status', 1)->orderBy('id')->get();
  
         $text = "📄 *Layanan Surat*\n\n";
         foreach ($layanan as $i => $l) {
@@ -257,7 +257,7 @@ class BotWebHookController extends Controller
 
     private function handlePilihLayanan($session, $message)
     {
-        $layanan = Layanan::where('status', 1)->get();
+        $layanan = Layanan::where('status', 1)->orderBy('id')->get();
         $index = (int) $message - 1;
 
         if (!isset($layanan[$index])) {

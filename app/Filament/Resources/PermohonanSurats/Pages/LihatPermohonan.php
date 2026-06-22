@@ -61,7 +61,7 @@ public function prosesTTE(): Action
                 $data['passphrase']
             );
 
-            if ($result) {
+            if ($result['success'] ?? false) {
                 $this->record->update([
                     'surat_tte'            => $result['path'],
                     'ditandatangani_pada'  => now(),

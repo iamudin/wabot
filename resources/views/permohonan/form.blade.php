@@ -4,7 +4,7 @@
 <head>
     
     <meta charset="UTF-8">
-    <title>Permohonan Surat Keterangan Tidak Mampu</title>
+    <title>Permohonan {{ $data->nama_layanan }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
