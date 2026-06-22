@@ -10,6 +10,7 @@ use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Geometry\Rectangle;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Log;
 
 class TtePdfService
 {
@@ -17,101 +18,102 @@ class TtePdfService
      * Proses tanda tangan elektronik PDF
      */
 
-public function generate($permohonan)
-{
+    public function generate($permohonan)
+    {
 
-    $jabatan = $permohonan->penandatangan->jabatan;
-    $nama    = $permohonan->penandatangan->nama;
+        $jabatan = $permohonan->penandatangan->jabatan;
+        $nama    = $permohonan->penandatangan->nama;
 
-    // =======================
-    // BUAT QR
-    // =======================
-    $qrPath = public_path($permohonan->kode_tiket.'.png');
+        // =======================
+        // BUAT QR
+        // =======================
+        $qrPath = public_path($permohonan->kode_tiket . '.png');
 
-    QrCode::format('png')
-        ->size(220)
-        ->margin(1)
-        ->generate(
-            url('surat/' . $permohonan->kode_tiket),
-            $qrPath
+        QrCode::format('png')
+            ->size(220)
+            ->margin(1)
+            ->generate(
+                url('surat/' . $permohonan->kode_tiket),
+                $qrPath
+            );
+
+        $manager = ImageManager::gd();
+
+        // =======================
+        // DIMENSI
+        // =======================
+        $width  = 800;
+        $height = 240;
+        $border = 5;
+
+        // =======================
+        // CANVAS BORDER (HITAM)
+        // =======================
+        $canvas = $manager->create(
+            $width + ($border * 2),
+            $height + ($border * 2)
+        )->fill('#000000');
+
+        // =======================
+        // KONTEN DALAM (PUTIH)
+        // =======================
+        $content = $manager->create($width, $height)->fill('#ffffff');
+
+        // =======================
+        // QR
+        // =======================
+        $qrImg = $manager->read($qrPath);
+        $content->place($qrImg, 'left', 10, 10);
+
+        // =======================
+        // TEXT
+        // =======================
+        $content->text(
+            'Ditandatangani secara elektronik oleh:',
+            260,
+            40,
+            function ($font) {
+                $font->file(public_path('Arial.ttf'));
+                $font->size(20);
+                $font->color('#000000');
+            }
         );
 
-    $manager = ImageManager::gd();
+        $content->text(
+            strtoupper($jabatan),
+            260,
+            80,
+            function ($font) {
+                $font->file(public_path('Arial_Bold.ttf'));
+                $font->size(22);
+                $font->color('#000000');
+            }
+        );
 
-    // =======================
-    // DIMENSI
-    // =======================
-    $width  = 800;
-    $height = 240;
-    $border = 5;
+        $content->text(
+            strtoupper($nama),
+            260,
+            130,
+            function ($font) {
+                $font->file(public_path('Arial_Bold.ttf'));
+                $font->size(22);
+                $font->color('#000000');
+            }
+        );
 
-    // =======================
-    // CANVAS BORDER (HITAM)
-    // =======================
-    $canvas = $manager->create(
-        $width + ($border * 2),
-        $height + ($border * 2)
-    )->fill('#000000');
+        // =======================
+        // TEMPEL KE CANVAS (BORDER)
+        // =======================
+        $canvas->place($content, 'top-left', $border, $border);
 
-    // =======================
-    // KONTEN DALAM (PUTIH)
-    // =======================
-    $content = $manager->create($width, $height)->fill('#ffffff');
+        // =======================
+        // OUTPUT BASE64
+        // =======================
+        return base64_encode($canvas->toPng());
+    }
 
-    // =======================
-    // QR
-    // =======================
-    $qrImg = $manager->read($qrPath);
-    $content->place($qrImg, 'left', 10, 10);
-
-    // =======================
-    // TEXT
-    // =======================
-    $content->text(
-        'Ditandatangani secara elektronik oleh:',
-        260,
-        40,
-        function ($font) {
-            $font->file(public_path('Arial.ttf'));
-            $font->size(20);
-            $font->color('#000000');
-        }
-    );
-
-    $content->text(
-        strtoupper($jabatan),
-        260,
-        80,
-        function ($font) {
-            $font->file(public_path('Arial_Bold.ttf'));
-            $font->size(22);
-            $font->color('#000000');
-        }
-    );
-
-    $content->text(
-        strtoupper($nama),
-        260,
-        130,
-        function ($font) {
-            $font->file(public_path('Arial_Bold.ttf'));
-            $font->size(22);
-            $font->color('#000000');
-        }
-    );
-
-    // =======================
-    // TEMPEL KE CANVAS (BORDER)
-    // =======================
-    $canvas->place($content, 'top-left', $border, $border);
-
-    // =======================
-    // OUTPUT BASE64
-    // =======================
-    return base64_encode($canvas->toPng());
-}
-
-    public function sign($permohonan, string $passphrase): array {
+    public function sign($permohonan, string $passphrase): array
+    {
         $pdfPath = Storage::disk('public')->path($permohonan->file_surat);
 
         if (!is_file($pdfPath)) {
@@ -146,6 +148,10 @@ public function generate($permohonan)
             ->post(config('tte.endpoint_api') . '/api/v2/sign/pdf', $payload);
 
         if (!$response->successful()) {
+            \Log::error('TTE gagal', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
             return $this->fail('Gagal menandatangani surat', $response->body());
         }
 
@@ -163,7 +169,8 @@ public function generate($permohonan)
     /**
      * Batalkan tanda tangan elektronik
      */
-    public function cancel($permohonan): void {
+    public function cancel($permohonan): void
+    {
         if ($permohonan->ditandatangani_pada && Storage::disk('local')->exists($permohonan->surat_tte)) {
             File::delete(Storage::disk('local')->path($permohonan->surat_tte));
         }
@@ -177,7 +184,8 @@ public function generate($permohonan)
     /**
      * Simpan PDF dari base64
      */
-    protected function simpanPdfDariBase64(string $base64String, $filename): string {
+    protected function simpanPdfDariBase64(string $base64String, $filename): string
+    {
         if (str_starts_with($base64String, 'data:application/pdf;base64,')) {
             $base64String = substr($base64String, strpos($base64String, ',') + 1);
         }
@@ -200,7 +208,8 @@ public function generate($permohonan)
         return 'permohonan/file-surat/' . $namaFile;
     }
 
-    protected function fail(string $message, mixed $detail = null): array {
+    protected function fail(string $message, mixed $detail = null): array
+    {
         return [
             'success' => false,
             'message' => $message,
